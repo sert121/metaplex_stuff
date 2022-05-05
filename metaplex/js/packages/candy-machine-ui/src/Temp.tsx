@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback,Fragment } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import * as anchor from '@project-serum/anchor';
 import {useParams } from 'react-router';
 
@@ -7,23 +7,10 @@ import { Container, Snackbar } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import Grid from '@material-ui/core/Grid';
-
-import Typography from '@mui/material/Typography';
-
+import Typography from '@material-ui/core/Typography';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletDialogButton } from '@solana/wallet-adapter-material-ui';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-// import AcUnitIcon from '@mui/icons-material/AcUnit';
-import mintantly from "./images/mintantly.jpeg";
-import { GoMarkGithub } from "react-icons/go";
-import { FiTwitter } from "react-icons/fi";
-import { FiGithub } from "react-icons/fi";
-import justlogo from "./images/justlogo.jpeg";
-
 import {
   awaitTransactionSignatureConfirmation,
   CandyMachineAccount,
@@ -38,7 +25,6 @@ import { GatewayProvider } from '@civic/solana-gateway-react';
 import { sendTransaction } from './connection';
 
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import BasicTable from './Table';
 
 const ConnectButton = styled(WalletDialogButton)`
   width: 100%;
@@ -59,19 +45,6 @@ export interface HomeProps {
   txTimeout: number;
   rpcHost: string;
 }
-
-function createData(name:string, calories:any) {
-  return { name, calories };
-}
-
-function startBarrage(){
-  console.log("barrage");
-  let timerId = setInterval(() => alert('tick'), 2000);
-
-// after 5 seconds stop
-  setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
-}
-
 
 const getCandyMachineId = (candyMachineid:string|undefined): anchor.web3.PublicKey | undefined => {
   try {
@@ -106,18 +79,11 @@ const Home = (props: HomeProps) => {
   });
   const [isActive, setIsActive] = useState(false);
   const [endDate, setEndDate] = useState<Date>();
-  const [itemsRemaining, setItemsRemaining] = useState<number>(0);
+  const [itemsRemaining, setItemsRemaining] = useState<number>();
   const [isWhitelistUser, setIsWhitelistUser] = useState(false);
   const [isPresale, setIsPresale] = useState(false);
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
-  const [ candyrows,updateCandyRows] = useState<any>([
-  createData('CMID', 0),
-  createData('Supply', 0),
-  createData('Remaining', 0),
-  createData('Public Mint Price', 0),
-  createData('Whitelisted', 0),
-  createData('WEN', 0),
-]);
+
   const rpcUrl = props.rpcHost;
   const wallet = useWallet();
 
@@ -138,14 +104,12 @@ const Home = (props: HomeProps) => {
     } as anchor.Wallet;
   }, [wallet]);
 
-  
   const refreshCandyMachineState = useCallback(async () => {
     if (!anchorWallet) {
       return;
     }
 
     if (candyMachineId) {
-
       try {
         const cndy = await getCandyMachineState(
           anchorWallet,
@@ -210,14 +174,6 @@ const Home = (props: HomeProps) => {
             active = false;
           }
         }
-        updateCandyRows([
-          createData('CMID', candyMachineId?.toString()),
-          createData('Supply', cndy?.state.itemsAvailable.toString()),
-          createData('Remaining', itemsRemaining),
-          createData('Public Mint Price', ((cndy?.state.price).toNumber()*0.000000001).toString() + ' SOL'),
-          createData('Whitelisted', isWhitelistUser.toString()),
-          createData('WEN', candyMachine?.state.goLiveDate === undefined ?  '-':candyMachine.state.goLiveDate.toString()),
-        ]);
         // amount to stop the mint?
         if (cndy?.state.endSettings?.endSettingType.amount) {
           let limit = Math.min(
@@ -289,7 +245,6 @@ const Home = (props: HomeProps) => {
             message: 'Mint Attempted',
             severity: 'success',
           });
-  
         } else {
           setAlertState({
             open: true,
@@ -365,31 +320,7 @@ const Home = (props: HomeProps) => {
   ]);
 
   return (
-    <div style={{minHeight:"98vh",backgroundColor:"#030210"}}>
-          {candyMachine && 
-    <AppBar style={{backgroundColor:"rgb(5,4,32)"}} position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-        <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-             <img src={justlogo} className="logo">
-              </img>
-            
-          </Typography>
-        </Toolbar>
-      </Container>
-    </AppBar>
-    }
-
-    {candyMachine && <Fragment>
-      <BasicTable externalrows={candyrows}>
-      </BasicTable>
-    </Fragment>}
-<Container style={{ marginTop: 40}}>
+    <Container style={{ marginTop: 100 }}>
       <Container maxWidth="xs" style={{ position: 'relative' }}>
         <Paper
           style={{
@@ -403,8 +334,6 @@ const Home = (props: HomeProps) => {
             <ConnectButton>Connect Wallet</ConnectButton>
           ) : (
             <>
-            
-
               {candyMachine && (
                 <Grid
                   container
@@ -413,12 +342,12 @@ const Home = (props: HomeProps) => {
                   wrap="nowrap"
                 >
                   <Grid item xs={3}>
-                    <Typography variant="body2" color="white">
+                    <Typography variant="body2" color="textSecondary">
                       Remaining
                     </Typography>
                     <Typography
                       variant="h6"
-                      color="white"
+                      color="textPrimary"
                       style={{
                         fontWeight: 'bold',
                       }}
@@ -427,14 +356,14 @@ const Home = (props: HomeProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography variant="body2" color="white">
+                    <Typography variant="body2" color="textSecondary">
                       {isWhitelistUser && discountPrice
                         ? 'Discount Price'
                         : 'Price'}
                     </Typography>
                     <Typography
                       variant="h6"
-                      color="white"
+                      color="textPrimary"
                       style={{ fontWeight: 'bold' }}
                     >
                       {isWhitelistUser && discountPrice
@@ -497,7 +426,6 @@ const Home = (props: HomeProps) => {
                   </Grid>
                 </Grid>
               )}
-
               <MintContainer>
                 {candyMachine?.state.isActive &&
                 candyMachine?.state.gatekeeper &&
@@ -598,14 +526,14 @@ const Home = (props: HomeProps) => {
               </MintContainer>
             </>
           )}
-          {/* <Typography
+          <Typography
             variant="caption"
             align="center"
             display="block"
             style={{ marginTop: 7, color: 'grey' }}
           >
             Powered by METAPLEX
-          </Typography> */}
+          </Typography>
         </Paper>
       </Container>
 
@@ -622,7 +550,6 @@ const Home = (props: HomeProps) => {
         </Alert>
       </Snackbar>
     </Container>
-    </div>
   );
 };
 

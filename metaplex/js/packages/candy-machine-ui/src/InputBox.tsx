@@ -4,6 +4,9 @@ import "./Inputbox.css";
 import logo from "./images/logo.png";
 import logo3 from "./images/logo3.png";
 
+import mintantly from "./images/mintantly.jpeg";
+import justlogo from "./images/justlogo.jpeg";
+
 import './header.css';
 
 const InputBox = () => {
@@ -31,22 +34,21 @@ const InputBox = () => {
   return (
       <div  className="outermist">
             <div className="header">
-                    <a href="#default" className="logo_url">
-                        <img src={logo} className="logo">
-
-                        </img>
-                    </a>
+                    <img src={justlogo} className="logo">
+                    </img>
+                    
                     <div className="header-right">
-                        <a className="active" href="#home">Home</a>
+                        {/* <a className="active" href="#home">Home</a>
                         <a href="#contact">Contact</a>
-                        <a href="#about">About</a>
+                        <a href="#about">About</a> */}
+
                     </div>
             </div>
         
       <div className='container-input'>
             <div className='input-parent' >
-                <div>
-                    <img src={logo3} className="logo2">
+                <div id="logo-wrapper">
+                    <img src={mintantly} className="logo2">
                     </img>
                 </div>
                 

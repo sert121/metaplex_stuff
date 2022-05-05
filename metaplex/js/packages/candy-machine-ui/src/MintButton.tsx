@@ -99,7 +99,7 @@ export const MintButton = ({
     // ) {
     //   setIsMinting(true);
     // }
-    console.log('change: ', gatewayStatus);
+    // console.log('change: ', gatewayStatus);
   }, [setIsMinting, previousGatewayStatus, gatewayStatus]);
 
   return (

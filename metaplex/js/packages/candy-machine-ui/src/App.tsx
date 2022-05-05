@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import * as anchor from '@project-serum/anchor';
 import Home from './Home';
 import InputBox from './InputBox';
-
+import Table from './Table';
 import { BrowserRouter, Routes ,Route } from 'react-router-dom';
 
 import { clusterApiUrl } from '@solana/web3.js';
@@ -86,6 +86,7 @@ const App = () => {
               </ThemeProvider>}
               
           />
+          <Route path="/testing" element={<Table></Table>}/>
         <Route path="/" element={<InputBox></InputBox>}/>
 
       </Routes>
